@@ -1,11 +1,9 @@
 //builds and exports unconnected client
 const { Client } = require('pg');
 
-const DB_NAME = 'thirtyDayChallenge';
+const DB_NAME = 'day-challenge';
 
-const DB_URL = 
-    process.env.DATABASE_URL || `postgres: //localhost:5432/ ${DB_NAME}`;
-
-let client;
+const client = 
+    new Client (process.env.DATABASE_URL || `postgres: //localhost:5432/ ${DB_NAME}`);
 
 module.exports = client;
