@@ -1,5 +1,5 @@
 // Express server
-//require('dotenv').config();
+require('dotenv').config();
 
 const { PORT = 3000 } = process.env; 
 
@@ -8,21 +8,24 @@ const app = express();
 
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 const cors = require('cors');
 app.use(cors());
 
-// const { apiRouter } = require('./api');
-// app.use('/api', apiRouter);
+//const { apiRouter } = require('./api');
+//app.use('/api', apiRouter);
 
-//const client = require('./db/client');
+const { client } = require('./db/client');
 
-app.get('/test', (req, res, next) => { //test route
+// Two test routes 
+app.get('/test', (req, res, next) => { 
     res.send('<h1>Hi, Im a test route!</h1>')
 })
+app.get('/', (req,res) => {
+    res.send('Hello World!')
+});
 
 app.get('*', (req, res, next) => {
     res.status(404);
@@ -36,7 +39,7 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log('I am listing...');
+    console.log(`I am listing...${PORT}`);
 });
 
-//client.connect();
+client.connect();
