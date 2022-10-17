@@ -7,7 +7,7 @@ async function dropTables() {
 
     try{
 
-        await client.query (`
+        await client.client.query (`
         DROP TABLE IF EXISTS users;
         `)
     } catch (error) {
@@ -19,7 +19,7 @@ async function dropTables() {
 async function createTables() {
     console.log('Starting to build tables...')
 
-    await client.query(`
+    await client.client.query(`
      CREATE TABLE users(
         id SERIAL PRIMARY KEY, 
         username VARCHAR(255) UNIQUE NOT NULL,
@@ -27,15 +27,10 @@ async function createTables() {
         password VARCHAR(255) NOT NULL,
         firstname VARCHAR(255),
         lastname VARCHAR(255)
-     ); 
-
-     CREATE TABLE tracking(
-        id SERIAL PRIMARY KEY,
-        sessionsCompleted VARCHAR(255) UNIQUE NOT NULL, 
-        repCount TEXT NOT NULL,
-        FOREIGN KEY (usersID) REFERENCES (userID)
      );
-    `)
+     
+
+     `)
 }
 
 /*
@@ -77,8 +72,8 @@ async function createInitialUsers() {
             lastname: "Marks",
             },
             {
-            username: "",
-            email: "",
+            username: "sandy",
+            email: "sandybeach@yahoo.com",
             password: "D0x63Wr$0y",
             firstname: "Cassandra",
             lastname: "Morales",
@@ -95,9 +90,29 @@ async function createInitialUsers() {
     }
 };
 
+// async function createInitialTracking() {
+//     try {
+//         const trackingToCreate = [
+//             {
+//                 sessionsCompleted: 5,
+//                 interval: 58,
+//                 repCount: 812
+//             }
+//         ]
+//         const tracking = await Promise.all(trackingToCreate.map(createInitialTracking));
+
+//         console.log('Tracking created');
+//         console.log(tracking);
+//         console.log('Finished creating tracking!')
+//     }catch (error) {
+//         console.log('Error creating tracking!')
+//         throw error;
+//     } 
+// }
+
 async function rebuildDB() {
     try {
-        client.connect();
+        client.client.connect();
         await dropTables();
         await createTables();
         await createInitialUsers();
