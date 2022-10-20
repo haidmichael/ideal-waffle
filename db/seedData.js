@@ -9,6 +9,7 @@ async function dropTables() {
 
         await client.client.query (`
         DROP TABLE IF EXISTS users;
+        DROP TABLE IF EXISTS routine_activities;
         `)
     } catch (error) {
         console.error('Error dropping tables')
@@ -27,6 +28,16 @@ async function createTables() {
         password VARCHAR(255) NOT NULL,
         firstname VARCHAR(255),
         lastname VARCHAR(255)
+     );
+
+     CREATE TABLE routine_activities(
+        id SERIAL PRIMARY KEY,
+        "routineID" INTEGER REFERENCES routine(id),
+        "userID" INTEGER REFERENCES user(id),
+        duration INTEGER,
+        repCount INTEGER, 
+        sessionsCompleted INTERGER, 
+        FOREIGN KEY (userID) REFERENCES (userID)
      );
      
 
@@ -90,25 +101,25 @@ async function createInitialUsers() {
     }
 };
 
-// async function createInitialTracking() {
-//     try {
-//         const trackingToCreate = [
-//             {
-//                 sessionsCompleted: 5,
-//                 interval: 58,
-//                 repCount: 812
-//             }
-//         ]
-//         const tracking = await Promise.all(trackingToCreate.map(createInitialTracking));
+async function createInitialRoutineActivities() {
+    try {
+        const routine_activitiesToCreate = [
+            {
+                duration: 42,
+                repCount: 588,
+                sessionCompleted: 17
+            }
+        ]
+        const tracking = await Promise.all(trackingToCreate.map(createInitialTracking));
 
-//         console.log('Tracking created');
-//         console.log(tracking);
-//         console.log('Finished creating tracking!')
-//     }catch (error) {
-//         console.log('Error creating tracking!')
-//         throw error;
-//     } 
-// }
+        console.log('Tracking created');
+        console.log(tracking);
+        console.log('Finished creating tracking!')
+    }catch (error) {
+        console.log('Error creating tracking!')
+        throw error;
+    } 
+}
 
 async function rebuildDB() {
     try {
